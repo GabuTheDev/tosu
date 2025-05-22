@@ -28,6 +28,7 @@ export class Gameplay extends AbstractState {
     isKeyOverlayDefaultState: boolean = true;
 
     performanceAttributes: rosu.PerformanceAttributes | undefined;
+    difficultyAttributes: rosu.DifficultyAttributes | undefined;
     gradualPerformance: rosu.GradualPerformance | undefined;
 
     retries: number;
@@ -512,11 +513,13 @@ export class Gameplay extends AbstractState {
             if (
                 isUpdate ||
                 !this.gradualPerformance ||
-                !this.performanceAttributes
+                !this.performanceAttributes ||
+                !this.difficultyAttributes
             ) {
                 if (this.gradualPerformance) this.gradualPerformance.free();
                 if (this.performanceAttributes)
                     this.performanceAttributes.free();
+                if (this.difficultyAttributes) this.difficultyAttributes.free();
 
                 const difficulty = new rosu.Difficulty({
                     mods: removeDebuffMods(this.mods.array),
@@ -531,6 +534,9 @@ export class Gameplay extends AbstractState {
                     mods: removeDebuffMods(this.mods.array),
                     lazer: this.game.client === ClientType.lazer
                 }).calculate(currentBeatmap);
+
+                this.difficultyAttributes =
+                    difficulty.calculate(currentBeatmap);
 
                 this.previousState = currentState;
             }
@@ -583,16 +589,14 @@ export class Gameplay extends AbstractState {
                 lazer: this.game.client === ClientType.lazer
             }).calculate(this.performanceAttributes);
 
-            const diff = new rosu.Difficulty({
-                mods: removeDebuffMods(this.mods.array),
-                lazer: this.game.client === ClientType.lazer
-            }).calculate(currentBeatmap);
-
             const maxAchievablePerformance = new rosu.Performance({
-                combo: Math.max(this.maxCombo, diff.maxCombo - this.lostCombo),
+                combo: Math.max(
+                    this.maxCombo,
+                    this.difficultyAttributes.maxCombo - this.lostCombo
+                ),
                 nGeki:
                     this.mode === 3
-                        ? diff.maxCombo -
+                        ? this.difficultyAttributes.maxCombo -
                           this.hit300 -
                           this.hitKatu -
                           this.hit100 -
@@ -602,7 +606,7 @@ export class Gameplay extends AbstractState {
                 n300:
                     this.mode === 3
                         ? this.hit300
-                        : diff.maxCombo -
+                        : this.difficultyAttributes.maxCombo -
                           this.hit100 -
                           this.hit50 -
                           this.hitMiss,
@@ -618,8 +622,6 @@ export class Gameplay extends AbstractState {
                 lazer: this.game.client === ClientType.lazer
             }).calculate(this.performanceAttributes);
             const t2 = performance.now();
-
-            diff.free();
 
             if (currPerformance) {
                 beatmapPP.updateCurrentAttributes(
