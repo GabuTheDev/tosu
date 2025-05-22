@@ -583,16 +583,30 @@ export class Gameplay extends AbstractState {
                 lazer: this.game.client === ClientType.lazer
             }).calculate(this.performanceAttributes);
 
+            const diff = new rosu.Difficulty({
+                mods: removeDebuffMods(this.mods.array),
+                lazer: this.game.client === ClientType.lazer
+            }).calculate(currentBeatmap);
+
             const maxAchievablePerformance = new rosu.Performance({
-                combo: Math.max(
-                    this.maxCombo,
-                    this.performanceAttributes.state?.maxCombo! - this.lostCombo
-                ),
+                combo: Math.max(this.maxCombo, diff.maxCombo - this.lostCombo),
+                nGeki:
+                    this.mode === 3
+                        ? diff.maxCombo -
+                          this.hit300 -
+                          this.hitKatu -
+                          this.hit100 -
+                          this.hit50 -
+                          this.hitMiss
+                        : 0,
                 n300:
-                    this.performanceAttributes.state?.maxCombo! -
-                    this.hit100 -
-                    this.hit50 -
-                    this.hitMiss,
+                    this.mode === 3
+                        ? this.hit300
+                        : diff.maxCombo -
+                          this.hit100 -
+                          this.hit50 -
+                          this.hitMiss,
+                nKatu: this.hitKatu,
                 n100: this.hit100,
                 n50: this.hit50,
                 misses: this.hitMiss,
@@ -604,6 +618,8 @@ export class Gameplay extends AbstractState {
                 lazer: this.game.client === ClientType.lazer
             }).calculate(this.performanceAttributes);
             const t2 = performance.now();
+
+            diff.free();
 
             if (currPerformance) {
                 beatmapPP.updateCurrentAttributes(
