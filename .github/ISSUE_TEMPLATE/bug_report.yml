@@ -44,7 +44,7 @@ body:
       required: true
       label: osu! version
       description: Which stream and version of osu! are you using?
-      placeholder: "Stable v20250619 / Cutting Edge v20250617 / Lazer v2025.607.0 / Tachyon v2025.616.0
+      placeholder: "Stable v20250619 / Cutting Edge v20250617 / Lazer v2025.607.0 / Tachyon v2025.616.0"
 
   - type: textarea
     id: media
