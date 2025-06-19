@@ -1,25 +1,55 @@
-name: Bug Report 2
-description: placeholder
+name: Bug Report
+description: Report a bug with tosu
 title: "bug: "
 labels: ["unlabeled"]
 body:
   - type: markdown
     attributes:
       value: |
-        1. Describe your issue as detailed as possible
-        2. Where does **tosu.exe** located (Folder path, Example: D:\tosu\tosu.exe)
-        3. Record video showing:
-           - tosu.env & config.ini
-           - Enable debug in settings
-           - Close tosu, then start it again
-           - Open osu and show what not working
-        4. Windows or Linux
+        ## 🐞 Thank you for helping improve tosu!
+        Before reporting, please make sure you're running the latest version and you have the `Debugging Mode` setting enabled.
+
+  - type: input
+    id: issue-description
+    attributes:
+      label: Describe the issue
+      description: What happened? Please include steps to reproduce if possible.
+      placeholder: "Describe the bug and how to reproduce it..."
+
+  - type: input
+    id: operating-system
+    attributes:
+      label: Operating System
+      description: Which OS are you using? Please mention your build version if possible.
+      placeholder: "e.g., Windows 10"
+
+  - type: input
+    id: osu-version
+    attributes:
+      label: osu! version
+      description: Which stream and version of osu! are you using?
+      placeholder: "e.g., Lazer 2025.607.0"
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Images or Videos
+      description: Drag and drop here or paste links to screenshots or videos that show the issue.
+      placeholder: "Drag and drop files here."
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log Files
+      description: Drag and drop the debug logs here (The latest file in `./logs/`).
+      placeholder: "Drag and drop files here."
 
   - type: checkboxes
-    id: platform
+    id: confirmation
     attributes:
-      label: What platform are you using?
+      label: Checklist
       options:
-        - label: Windows
-        - label: Linux
-      # 'required' is not a valid attribute for checkboxes in GitHub Issue Forms
+        - label: I made sure the issue was not reported before.
+          required: true
+        - label: I am using the latest tosu version at the time of the report.
+          required: true
