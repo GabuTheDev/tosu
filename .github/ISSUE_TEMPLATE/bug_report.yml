@@ -7,34 +7,49 @@ body:
     attributes:
       value: |
 
-        ### 🐞 Thank you for helping improve tosu!
-        Before reporting, please make sure you're running the latest version and you have the `Debugging Mode` setting enabled.
+        ### tosu bug report form
+        Thank you for helping tosu get better! Before completing the form, please follow the next steps:
+        1. In the settings page, enable `Debugging Mode`.
+        2. Restart osu! and tosu.
+        3. Reproduce the issue.
+        4. Close tosu.
+        
 
   - type: textarea
     id: issue-description
     attributes:
+      required: true
       label: Describe the issue
-      description: What happened? Please include steps to reproduce if possible.
-      placeholder: "Describe the bug and how to reproduce it..."
+      description: |
+        What happened? Please include steps to reproduce if possible.
+        If you're having issues with the tosu overlay, please also mention your hardware.
+      placeholder: |
+        tosu crashed unexpectedly!
+
+        1. launch tosu
+        2. wait a little
+        3. crash happens
 
   - type: input
     id: operating-system
     attributes:
+      required: true
       label: Operating System
-      description: Which OS are you using? Please mention your build version if possible.
-      placeholder: "e.g., Windows 10"
+      description: Which OS are you using?
+      placeholder: "Windows 10 / Windows 11 / Ubuntu 22.04 / Arch 2025.06.01"
 
   - type: input
     id: osu-version
     attributes:
+      required: true
       label: osu! version
       description: Which stream and version of osu! are you using?
-      placeholder: "e.g., Lazer 2025.607.0"
+      placeholder: "Stable v20250619 / Cutting Edge v20250617 / Lazer v2025.607.0 / Tachyon v2025.616.0
 
   - type: textarea
     id: media
     attributes:
-      label: Images or Videos
+      label: Media
       description: Drag and drop here or paste links to screenshots or videos that show the issue.
       placeholder: "Drag and drop files here."
 
