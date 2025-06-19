@@ -12,7 +12,6 @@ body:
         1. In the settings page, enable `Debugging Mode`.
         2. Restart osu! and tosu.
         3. Reproduce the issue.
-        4. Close tosu.
         
 
   - type: textarea
@@ -20,14 +19,11 @@ body:
     attributes:
       label: Describe the issue
       description: |
-        What happened? Please include steps to reproduce if possible.
+        What happened? Please include steps to reproduce if possible. \n
         If you're having issues with the tosu overlay, please also mention your hardware.
       placeholder: |
         tosu crashed unexpectedly!
-
-        1. launch tosu
-        2. wait a little
-        3. crash happens
+        Here's what I've done: I launched tosu and then it crashed :(
     validations:
       required: true
 
