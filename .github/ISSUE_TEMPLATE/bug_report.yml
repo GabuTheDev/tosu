@@ -6,10 +6,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 🐞 Thank you for helping improve tosu!
+
+        ### 🐞 Thank you for helping improve tosu!
         Before reporting, please make sure you're running the latest version and you have the `Debugging Mode` setting enabled.
 
-  - type: input
+  - type: textarea
     id: issue-description
     attributes:
       label: Describe the issue
