@@ -19,7 +19,7 @@ body:
     attributes:
       label: Describe the issue
       description: |
-        What happened? Please include steps to reproduce if possible. \n
+        What happened? Please include steps to reproduce if possible.  
         If you're having issues with the tosu overlay, please also mention your hardware.
       placeholder: |
         tosu crashed unexpectedly!
