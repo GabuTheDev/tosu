@@ -1,0 +1,56 @@
+name: Question or General Discussion
+description: Ask a question or start a general discussion about tosu
+title: "[Question]: "
+labels: ["question"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question or want to discuss something about tosu?
+        Feel free to ask! We're here to help.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What is this about?
+      options:
+        - General Question
+        - Usage Help
+        - Configuration Help
+        - Integration Question
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question or Discussion Topic
+      description: What would you like to know or discuss?
+      placeholder: Describe your question or topic in detail
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or information that might be helpful
+      placeholder: Any additional information that might help us answer your question
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues and discussions for similar questions
+          required: true
+        - label: I have checked the documentation and README
+          required: false

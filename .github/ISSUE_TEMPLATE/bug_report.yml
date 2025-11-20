@@ -1,0 +1,108 @@
+name: Bug Report
+description: Create a report to help us improve tosu
+title: "[Bug]: "
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        Please provide as much detail as possible to help us understand and fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Describe your issue as detailed as possible
+      placeholder: Tell us what happened and what you expected to happen
+    validations:
+      required: true
+
+  - type: input
+    id: tosu-location
+    attributes:
+      label: tosu.exe Location
+      description: Where is tosu.exe located? (Folder path)
+      placeholder: "Example: D:\\tosu\\tosu.exe"
+    validations:
+      required: true
+
+  - type: input
+    id: tosu-version
+    attributes:
+      label: tosu Version
+      description: What version of tosu are you using?
+      placeholder: "Example: v4.2.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Windows 11
+        - Windows 10
+        - Windows (other)
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: osu-version
+    attributes:
+      label: osu! Version
+      description: Which version of osu! are you using?
+      options:
+        - osu! stable
+        - osu! lazer
+        - Both
+    validations:
+      required: true
+
+  - type: textarea
+    id: video-proof
+    attributes:
+      label: Video/Screenshots
+      description: |
+        Please record a video or provide screenshots showing:
+        - tosu.env & config.ini
+        - Enable debug in settings
+        - Close tosu, then start it again
+        - Open osu! and show what's not working
+      placeholder: Paste links to video or drag and drop screenshots here
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: If applicable, please provide any relevant log files or error messages
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information that might help us understand the issue
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues to make sure this is not a duplicate
+          required: true
+        - label: I have provided all the required information above
+          required: true

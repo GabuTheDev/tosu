@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discord Community
+    url: https://discord.gg/WX7BTs8kwh
+    about: Join our Discord server for real-time help and discussions
+  - name: 📚 Documentation
+    url: https://github.com/tosuapp/tosu/blob/master/README.md
+    about: Check out the documentation for guides and information
+  - name: 🎨 Counters/Overlays
+    url: https://github.com/tosuapp/counters/tree/master/counters
+    about: Browse available counters and overlays for tosu
