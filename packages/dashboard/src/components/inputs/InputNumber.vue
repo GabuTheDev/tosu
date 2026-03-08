@@ -51,8 +51,9 @@ const sanitizeValue = (val: number): number => {
 		else return props.min ?? Number.MIN_SAFE_INTEGER;
 	}
 
-	const multiplier = Math.pow(10, props.precision);
-	const sanitized = Math.floor(val * multiplier) / multiplier;
+	const precision = Math.max(0, Math.floor(props.precision));
+	const multiplier = Math.pow(10, precision);
+	const sanitized = Math.round(val * multiplier) / multiplier;
 
 	return sanitized === 0 ? 0 : sanitized;
 };
