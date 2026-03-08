@@ -68,6 +68,10 @@ const onKeydown = (e: KeyboardEvent) => {
 
 		if (ui.recordedKeys.length < props.maxKeys && !ui.recordedKeys.includes(formatted)) {
 			ui.recordedKeys.push(formatted);
+
+			if (ui.recordedKeys.length === props.maxKeys) {
+				saveAndStop();
+			}
 		}
 	}
 };
@@ -79,17 +83,23 @@ const onKeyup = (e: KeyboardEvent) => {
 
 	ui.currentlyPressed.delete(e.code);
 
-	if (ui.currentlyPressed.size === 0 && ui.recordedKeys.length > 0) {
+	if (ui.currentlyPressed.size === 0) {
+		saveAndStop();
+	}
+};
+
+const saveAndStop = () => {
+	if (ui.recordedKeys.length > 0) {
 		const result = ui.recordedKeys.join(' + ');
 		error.value = runValidation(result);
 
 		if (!error.value) {
 			model.value = result;
 		}
-
-		stopRecording();
-		(containerRef.value?.querySelector('.input-wrapper') as HTMLElement)?.blur();
 	}
+
+	stopRecording();
+	(containerRef.value?.querySelector('.input-wrapper') as HTMLElement)?.blur();
 };
 
 const startRecording = () => {
