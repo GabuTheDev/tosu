@@ -155,7 +155,7 @@ const toggleSidebar = (): void => {
 	font-family: var(--font-family-base), serif;
 	font-weight: 700;
 	font-size: 1.25em;
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .toggle-btn {
@@ -165,7 +165,7 @@ const toggleSidebar = (): void => {
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	color: var(--text-1);
+	color: var(--text-2);
 	border-radius: var(--radius);
 	flex-shrink: 0;
 	transition: all 0.2s ease;
@@ -174,7 +174,7 @@ const toggleSidebar = (): void => {
 }
 
 .toggle-btn:hover {
-	color: var(--text-3);
+	color: var(--text-0);
 	background-color: var(--surface-2);
 }
 
@@ -196,7 +196,7 @@ const toggleSidebar = (): void => {
 	align-items: center;
 	height: 3em;
 	border-radius: var(--radius);
-	color: var(--text-1);
+	color: var(--text-2);
 	text-decoration: none;
 	white-space: nowrap;
 	position: relative;
@@ -217,11 +217,11 @@ const toggleSidebar = (): void => {
 }
 
 .nav-item:hover {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .nav-item.router-link-active {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .nav-item .label {
@@ -286,7 +286,7 @@ const toggleSidebar = (): void => {
 	align-items: center;
 	justify-content: center;
 	background-color: var(--accent);
-	color: var(--text-3);
+	color: var(--text-0);
 	pointer-events: none;
 	z-index: 5;
 	right: 1rem;
@@ -315,6 +315,6 @@ const toggleSidebar = (): void => {
 	height: 2em;
 	border-radius: calc(var(--radius) - 0.5em);
 	background-color: var(--surface-1);
-	color: var(--text-1);
+	color: var(--text-2);
 }
 </style>

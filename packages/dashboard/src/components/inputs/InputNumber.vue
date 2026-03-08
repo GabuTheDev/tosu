@@ -237,9 +237,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div 
-		ref="containerRef" 
-		class="input-number" 
+	<div
+		ref="containerRef"
+		class="input-number"
 		:class="{ disabled, hasError: !!error }"
 	>
 		<div class="input-wrapper">
@@ -297,16 +297,16 @@ onUnmounted(() => {
 				<div
 					v-if="ui.isReady && (error || ui.showHelp)"
 					class="tooltip-portal"
-					:class="{ 
-						'is-error': !!error, 
-						'at-top': ui.tooltipAtTop 
+					:class="{
+						'is-error': !!error,
+						'at-top': ui.tooltipAtTop
 					}"
 					:style="ui.tooltipStyle"
 				>
 					<div class="tooltip-arrow" />
 					<template v-if="error">{{ error }}</template>
 					<template v-else>
-						<strong>Shift</strong> ±{{ sanitizeValue(props.step * 10) }} &nbsp; 
+						<strong>Shift</strong> ±{{ sanitizeValue(props.step * 10) }} &nbsp;
 						<strong>Alt</strong> ±{{ sanitizeValue(props.step * 5) }}
 					</template>
 				</div>
@@ -340,7 +340,7 @@ onUnmounted(() => {
 	background: transparent;
 	border: none;
 	padding: 0 0.5rem;
-	color: var(--text-1);
+	color: var(--text-2);
 	font-family: var(--font-family-mono), monospace;
 	font-size: 1rem;
 	font-weight: 700;
@@ -352,7 +352,7 @@ onUnmounted(() => {
 
 .input:focus,
 .input-wrapper:hover .input {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .input::-webkit-outer-spin-button,
@@ -371,7 +371,7 @@ onUnmounted(() => {
 	width: 2.25rem;
 	height: 100%;
 	background-color: var(--surface-2);
-	color: var(--text-1);
+	color: var(--text-2);
 	border: none;
 	cursor: pointer;
 	display: flex;
@@ -384,7 +384,7 @@ onUnmounted(() => {
 
 .step-btn:hover:not(:disabled) {
 	background-color: hsl(0, 0%, 15%);
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .step-btn:active:not(.is-disabled) .fa-icon {
@@ -420,7 +420,7 @@ onUnmounted(() => {
 	z-index: 9999;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 	background-color: var(--surface-2);
-	color: var(--text-1);
+	color: var(--text-2);
 	border: 1px solid var(--surface-2);
 }
 
@@ -430,7 +430,7 @@ onUnmounted(() => {
 	border: none;
 }
 
-.tooltip-portal strong { color: var(--text-3); }
+.tooltip-portal strong { color: var(--text-0); }
 
 .tooltip-portal .tooltip-arrow {
 	position: absolute;

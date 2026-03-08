@@ -240,7 +240,7 @@ onUnmounted(() => {
 	background-color: var(--surface-0);
 	border: 1px solid var(--surface-2);
 	border-radius: calc(var(--radius) / 2);
-	color: var(--text-2);
+	color: var(--text-1);
 	font-size: 0.875rem;
 	font-weight: 700;
 	user-select: none;
@@ -249,7 +249,7 @@ onUnmounted(() => {
 }
 
 .chip:hover {
-	color: var(--text-3);
+	color: var(--text-0);
 	background-color: var(--surface-2);
 }
 
@@ -278,14 +278,14 @@ onUnmounted(() => {
 }
 
 .chip.is-invalid .remove-btn:hover {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .remove-btn {
 	background: none;
 	border: none;
 	padding: 2px;
-	color: var(--text-0);
+	color: var(--text-3);
 	cursor: pointer;
 	display: flex;
 	align-items: center;
@@ -304,14 +304,14 @@ onUnmounted(() => {
 	background: transparent;
 	border: none;
 	outline: none;
-	color: var(--text-3);
+	color: var(--text-0);
 	font-family: var(--font-family-base), serif;
 	font-size: 0.9375rem;
 	padding: 0.25rem;
 }
 
 .chip-input::placeholder {
-	color: var(--text-0);
+	color: var(--text-3);
 }
 
 .fa-icon {
@@ -359,7 +359,7 @@ onUnmounted(() => {
 	z-index: 9999;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 	background-color: var(--surface-2);
-	color: var(--text-1);
+	color: var(--text-2);
 	border: 1px solid var(--surface-2);
 }
 
@@ -370,7 +370,7 @@ onUnmounted(() => {
 }
 
 .tooltip-portal strong {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .tooltip-portal .tooltip-arrow {

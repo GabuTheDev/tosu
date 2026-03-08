@@ -286,7 +286,7 @@ onUnmounted(() => {
 	background: transparent;
 	border: none;
 	padding: 0 1rem;
-	color: var(--text-1);
+	color: var(--text-2);
 	font-family: var(--font-family-base), serif;
 	font-size: 1rem;
 	font-weight: 600;
@@ -304,11 +304,11 @@ onUnmounted(() => {
 }
 
 .input:focus, .input-wrapper:hover .input, .isOpen .input {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .placeholder {
-	color: var(--text-0);
+	color: var(--text-3);
 }
 
 .hasError .input-wrapper {
@@ -323,7 +323,7 @@ onUnmounted(() => {
 }
 
 .chevron-btn {
-	color: var(--text-0);
+	color: var(--text-3);
 	width: 0.75rem;
 	height: 0.75rem;
 	transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -376,7 +376,7 @@ onUnmounted(() => {
 	border: 1px solid transparent;
 	border-radius: calc(var(--radius) - 0.25rem);
 	cursor: pointer;
-	color: var(--text-1);
+	color: var(--text-2);
 	transition: all 0.15s ease;
 	gap: 1.25rem;
 	text-align: left;
@@ -386,12 +386,12 @@ onUnmounted(() => {
 
 .option:hover, .option:focus {
 	background-color: var(--surface-1);
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .option.active {
 	background-color: hsl(0, 0%, 14%);
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .option-main {
@@ -405,7 +405,7 @@ onUnmounted(() => {
 .option-icon {
 	width: 1.125rem;
 	height: 1.125rem;
-	color: var(--text-0);
+	color: var(--text-3);
 	flex-shrink: 0;
 }
 
@@ -453,7 +453,7 @@ onUnmounted(() => {
 .no-results {
 	padding: 1.5rem;
 	text-align: center;
-	color: var(--text-0);
+	color: var(--text-3);
 	font-size: 0.875rem;
 }
 

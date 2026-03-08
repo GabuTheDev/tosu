@@ -253,7 +253,7 @@ onUnmounted(() => {
 	background-color: var(--surface-0);
 	border: 1px solid var(--surface-2);
 	border-radius: 4px;
-	color: var(--text-2);
+	color: var(--text-1);
 	font-size: 0.75rem;
 	font-weight: 800;
 	text-transform: uppercase;
@@ -261,19 +261,19 @@ onUnmounted(() => {
 }
 
 .key-badge.active {
-	color: var(--text-3);
-	border-color: var(--text-0);
+	color: var(--text-0);
+	border-color: var(--text-3);
 	background-color: var(--surface-2);
 }
 
 .placeholder {
-	color: var(--text-0);
+	color: var(--text-3);
 	font-size: 0.9375rem;
 	font-weight: 600;
 }
 
 .status-icon {
-	color: var(--text-0);
+	color: var(--text-3);
 	display: flex;
 	align-items: center;
 	margin-left: 1rem;

@@ -89,10 +89,10 @@ const validators = {
 			// Part of an IP can be 0-255 or a '*'
 			const p = '(?:\\*|(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))';
 			const ipWildcardRegex = new RegExp(`^(\\*|${p}\\.${p}\\.${p}\\.${p})$`);
-			
+
 			// Hostname must be 'localhost', 'absolute', or have at least one dot
 			const hostRegex = /^(localhost|absolute|([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,6})$/;
-			
+
 			return ipWildcardRegex.test(val) || hostRegex.test(val) ? null : 'Invalid IP, Hostname or Wildcard';
 		}
 	],
@@ -226,11 +226,11 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.serverIp"
 						can-erase
 					>
-						<Input 
-							type="text" 
-							v-model="settings.serverIp" 
+						<Input
+							type="text"
+							v-model="settings.serverIp"
 							v-model:error="errors.serverIp"
-							placeholder="127.0.0.1" 
+							placeholder="127.0.0.1"
 							:validators="validators.ip"
 						/>
 					</SettingItem>
@@ -241,12 +241,12 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="The network port for the tosu background service."
 						:default-value="defaultSettings.serverPort"
 					>
-						<Input 
+						<Input
 							type="number"
-							v-model="settings.serverPort" 
+							v-model="settings.serverPort"
 							v-model:error="errors.serverPort"
-							:min="1024" 
-							:max="65535" 
+							:min="1024"
+							:max="65535"
 							:validators="validators.port"
 						/>
 					</SettingItem>
@@ -257,11 +257,11 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Global interval (ms) between memory reading requests."
 						:default-value="defaultSettings.pollRate"
 					>
-						<Input 
+						<Input
 							type="number"
-							v-model="settings.pollRate" 
+							v-model="settings.pollRate"
 							v-model:error="errors.pollRate"
-							:min="100" 
+							:min="100"
 							:validators="validators.pollRate"
 						/>
 					</SettingItem>
@@ -272,11 +272,11 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Interval (ms) for high-frequency data like KeyOverlay and HitError."
 						:default-value="defaultSettings.precisePollRate"
 					>
-						<Input 
+						<Input
 							type="number"
-							v-model="settings.precisePollRate" 
+							v-model="settings.precisePollRate"
 							v-model:error="errors.precisePollRate"
-							:min="0" 
+							:min="0"
 							:validators="validators.precisePollRate"
 						/>
 					</SettingItem>
@@ -288,10 +288,10 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.allowedIps"
 						vertical
 					>
-						<Input 
+						<Input
 							type="chips"
-							v-model="settings.allowedIps" 
-							placeholder="e.g. 192.168.1.1" 
+							v-model="settings.allowedIps"
+							placeholder="e.g. 192.168.1.1"
 							:validators="validators.ip"
 							:static-chips="[settings.serverIp]"
 						/>
@@ -359,12 +359,12 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 
 .header-info h1 {
 	font-size: 2.25rem;
-	color: var(--text-3);
+	color: var(--text-0);
 	margin-bottom: 0.5rem;
 }
 
 .header-info p {
-	color: var(--text-1);
+	color: var(--text-2);
 	font-size: 1.125rem;
 }
 
@@ -380,7 +380,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 	background: none;
 	border: none;
 	padding: 0.5rem 1rem;
-	color: var(--text-1);
+	color: var(--text-2);
 	font-size: 0.9375rem;
 	font-weight: 700;
 	cursor: pointer;
@@ -400,7 +400,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 }
 
 .nav-item:hover {
-	color: var(--text-3);
+	color: var(--text-0);
 	background-color: var(--surface-1);
 }
 

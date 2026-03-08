@@ -175,12 +175,12 @@ const getIcon = (name: string): string => `${solidSprite}#${name}`;
 .setting-name {
 	font-size: 1rem;
 	font-weight: 700;
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .setting-description {
 	font-size: 0.875rem;
-	color: var(--text-1);
+	color: var(--text-2);
 	line-height: 1.4;
 }
 
@@ -224,7 +224,7 @@ const getIcon = (name: string): string => `${solidSprite}#${name}`;
 	justify-content: flex-end;
 	padding: 0;
 	cursor: pointer;
-	color: var(--text-1);
+	color: var(--text-2);
 	pointer-events: auto;
 	box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
 	transition: background-color 0.2s ease, transform 0.3s cubic-bezier(0.3, 0, 0, 1), color 0.2s ease;
@@ -242,7 +242,7 @@ const getIcon = (name: string): string => `${solidSprite}#${name}`;
 
 .action-btn:hover {
 	background-color: var(--surface-2);
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .action-btn.erase:hover { color: var(--danger); }

@@ -54,7 +54,7 @@ const getIcon = (name: string): string => `${solidSprite}#${name}`;
 
 .crumb-link {
 	text-decoration: none;
-	color: var(--text-1);
+	color: var(--text-2);
 	font-weight: 700;
 	font-size: 0.875rem;
 	transition: all 0.2s ease;
@@ -64,11 +64,11 @@ const getIcon = (name: string): string => `${solidSprite}#${name}`;
 }
 
 .crumb-link:hover {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .crumb-link.active {
-	color: var(--text-3);
+	color: var(--text-0);
 	pointer-events: none;
 }
 
@@ -78,7 +78,7 @@ const getIcon = (name: string): string => `${solidSprite}#${name}`;
 }
 
 .separator {
-	color: var(--text-0);
+	color: var(--text-3);
 	font-family: var(--font-family-mono), monospace;
 	font-size: 0.75rem;
 	opacity: 0.4;

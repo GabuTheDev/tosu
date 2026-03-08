@@ -205,7 +205,7 @@ onUnmounted(() => {
 	background: transparent;
 	border: none;
 	padding: 0 1em;
-	color: var(--text-1);
+	color: var(--text-2);
 	font-family: var(--font-family-base), serif;
 	font-size: 1rem;
 	font-weight: 600;
@@ -217,7 +217,7 @@ onUnmounted(() => {
 
 .input:focus,
 .input-wrapper:hover .input {
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .input-wrapper:focus-within {
@@ -225,7 +225,7 @@ onUnmounted(() => {
 }
 
 .input::placeholder {
-	color: var(--text-0);
+	color: var(--text-3);
 }
 
 .hasError .input-wrapper {
@@ -250,7 +250,7 @@ onUnmounted(() => {
 .toggle-btn {
 	background: none;
 	border: none;
-	color: var(--text-0);
+	color: var(--text-3);
 	cursor: pointer;
 	padding: 4px;
 	display: flex;
@@ -261,7 +261,7 @@ onUnmounted(() => {
 }
 
 .toggle-btn:hover {
-	color: var(--text-2);
+	color: var(--text-1);
 }
 
 .fa-icon {

@@ -145,7 +145,7 @@ onUnmounted(() => {
 	left: var(--sw-padding);
 	width: var(--sw-thumb-size);
 	height: var(--sw-thumb-size);
-	background-color: var(--text-3);
+	background-color: var(--text-0);
 	border-radius: 50%;
 	pointer-events: none;
 	transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);

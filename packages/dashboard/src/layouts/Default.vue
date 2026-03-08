@@ -110,13 +110,13 @@ header {
 		width: 2.5em;
 		height: 2.5em;
 		border-radius: var(--radius);
-		color: var(--text-1);
+		color: var(--text-2);
 		transition: all 0.2s ease;
 		text-decoration: none;
 
 		&:hover {
 			background-color: var(--surface-2);
-			color: var(--text-3);
+			color: var(--text-0);
 		}
 
 		.fa-icon {
@@ -171,12 +171,12 @@ footer {
 	gap: 0.5em;
 
 	.label {
-		color: var(--text-0);
+		color: var(--text-3);
 		font-weight: 500;
 	}
 
 	.value {
-		color: var(--text-2);
+		color: var(--text-1);
 		font-weight: 600;
 
 		&.success {
