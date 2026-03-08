@@ -1,21 +1,56 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Props {
-	variant?: 'primary' | 'secondary';
+	variant?: 'primary' | 'secondary' | 'danger';
 	disabled?: boolean;
+	color?: string;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
 	variant: 'primary',
 	disabled: false,
+	color: undefined,
 });
 
 defineEmits<{
 	(e: 'click', event: MouseEvent): void;
 }>();
+
+const getContrastColor = (hexcolor: string) => {
+	if (!hexcolor) return undefined;
+	if (hexcolor.startsWith('var')) return 'var(--text-0)';
+
+	const hex = hexcolor.replace('#', '');
+	const r = parseInt(hex.substring(0, 2), 16);
+	const g = parseInt(hex.substring(2, 4), 16);
+	const b = parseInt(hex.substring(4, 6), 16);
+
+	// YIQ equation calculates the relative luminance of a color.
+	// 0-255 scale: >= 128 is "light", < 128 is "dark".
+	const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+	return yiq >= 128 ? 'var(--surface-0)' : 'var(--text-0)';
+};
+
+const dynamicStyles = computed(() => {
+	if (!props.color) return {};
+
+	return {
+		backgroundColor: props.color,
+		color: getContrastColor(props.color),
+	};
+});
 </script>
 
 <template>
-	<button type="button" :disabled="disabled" class="btn" :class="[variant]" @click="$emit('click', $event)">
+	<button
+		type="button"
+		:disabled="disabled"
+		class="btn"
+		:class="[variant]"
+		:style="dynamicStyles"
+		@click="$emit('click', $event)"
+	>
 		<slot />
 	</button>
 </template>
@@ -44,12 +79,17 @@ defineEmits<{
 
 .btn.primary {
 	background-color: var(--accent);
-	color: var(--text-3);
+	color: var(--text-0);
 }
 
 .btn.secondary {
-	background-color: var(--surface-2);
-	color: var(--text-2);
+	background-color: var(--surface-3);
+	color: var(--text-1);
+}
+
+.btn.danger {
+	background-color: var(--danger);
+	color: var(--text-0);
 }
 
 .btn:hover:not(:disabled) {
