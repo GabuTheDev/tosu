@@ -1,6 +1,43 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
+import { useModal } from '@/composables/useModal';
 import Button from '@/components/Button.vue';
+
+const { open } = useModal();
+
+const testPrompt = async () => {
+	const result = await open('ModalPrompt', {
+		title: 'Delete Resource?',
+		message: 'Are you absolutely sure you want to delete this resource? This action cannot be reversed.',
+		buttons: [
+			{ label: 'Keep it', value: 'cancel' },
+			{ label: 'Wait...', value: 'wait', variant: 'secondary' },
+			{ label: 'Delete Forever', value: 'delete', variant: 'danger' },
+		],
+	});
+	console.log('Prompt result:', result);
+};
+
+const testDefaultPrompt = async () => {
+	const result = await open('ModalPrompt', {
+		title: 'Default Prompt',
+		message: 'This is using the default buttons defined in ModalPrompt.vue.',
+	});
+	console.log('Default prompt result:', result);
+};
+
+const testColoredPrompt = async () => {
+	const result = await open('ModalPrompt', {
+		title: 'Colored Actions',
+		message: 'This modal uses custom HEX colors for buttons, which automatically calculate their text contrast.',
+		buttons: [
+			{ label: 'Cancel', value: false },
+			{ label: 'Yellow Warning', value: 'yellow', color: '#ffcc00' },
+			{ label: 'Deep Blue', value: 'blue', color: '#1e3a8a' },
+		],
+	});
+	console.log('Colored prompt result:', result);
+};
 import Input from '@/components/Input.vue';
 import SettingItem, { type Action } from '@/components/SettingItem.vue';
 import { type DropdownOption } from '@/components/inputs/Dropdown.vue';
@@ -33,7 +70,7 @@ const addAction = () => {
 	const icons = ['heart', 'star', 'fire', 'bolt', 'ghost', 'shield', 'trophy'];
 	const colors = ['success', 'info', 'reset', 'erase'];
 	const id = Math.random().toString(36).substring(2, 9);
-	
+
 	const action = {
 		id,
 		label: `Dummy`,
@@ -43,7 +80,7 @@ const addAction = () => {
 			extraActions.value = extraActions.value.filter(a => a.id !== id);
 		}
 	};
-	
+
 	extraActions.value.push(action);
 };
 
@@ -93,7 +130,7 @@ const toggleError = () => {
 		<section class="component-section">
 			<h2>Telescoping Toolbar (Extreme)</h2>
 			<p class="description">Test the physical "pushing" and "sliding" animations by adding or removing actions. <strong>Click any button in the toolbar to remove it.</strong></p>
-			
+
 			<div class="demo-controls" style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
 				<Button variant="secondary" @click="addAction">+ Add Action</Button>
 				<Button variant="secondary" @click="extraActions = []">Clear All</Button>
@@ -121,6 +158,9 @@ const toggleError = () => {
 					<div class="button-row">
 						<Button variant="primary">Primary</Button>
 						<Button variant="secondary">Secondary</Button>
+						<Button variant="secondary" @click="testDefaultPrompt">Open Default Prompt</Button>
+						<Button variant="secondary" @click="testColoredPrompt">Open Colored Prompt</Button>
+						<Button variant="secondary" @click="testPrompt">Open Custom Prompt</Button>
 					</div>
 				</div>
 

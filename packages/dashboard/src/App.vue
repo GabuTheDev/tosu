@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue';
 import { useRoute } from 'vue-router';
+import ModalRoot from '@/components/ModalRoot.vue';
 
 const layoutModules = import.meta.glob<Component>('./layouts/*.vue', {
 	eager: true,
@@ -23,4 +24,5 @@ const layout = computed(() => {
 
 <template>
 	<component :is="layout" />
+	<ModalRoot />
 </template>
