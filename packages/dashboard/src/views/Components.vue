@@ -131,6 +131,20 @@ const toggleError = () => {
 						<Button variant="secondary" disabled>Disabled Secondary</Button>
 					</div>
 				</div>
+
+				<div class="group">
+					<h3>Custom Colors (Auto-Contrast)</h3>
+					<p class="description">Text color is automatically inferred (Black/White) based on the background brightness.</p>
+					<div class="button-row">
+						<Button color="#ffffff">Pure White</Button>
+						<Button color="#000000">Pure Black</Button>
+						<Button color="#ffcc00">Osu! Yellow</Button>
+						<Button color="#ff66aa">Pink</Button>
+						<Button color="#3178c6">Tosu Blue</Button>
+						<Button color="#22c55e">Lush Green</Button>
+						<Button color="#ef4444">Bright Red</Button>
+					</div>
+				</div>
 			</div>
 		</section>
 
@@ -217,9 +231,9 @@ const toggleError = () => {
 
 					<div class="input-demo-item">
 						<span class="label">Manual Error Toggle</span>
-						<Input 
+						<Input
 							type="number"
-							v-model="settings.quantity" 
+							v-model="settings.quantity"
 							v-model:error="errorText"
 						/>
 						<Button variant="secondary" class="error-toggle" @click="toggleError">Toggle Error</Button>
@@ -263,10 +277,10 @@ const toggleError = () => {
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Validated (No small letters)</span>
-						<Input 
-							type="chips" 
-							v-model="settings.tags" 
-							:validators="[(v) => /[a-z]/.test(v) ? 'Only uppercase allowed' : null]" 
+						<Input
+							type="chips"
+							v-model="settings.tags"
+							:validators="[(v) => /[a-z]/.test(v) ? 'Only uppercase allowed' : null]"
 						/>
 					</div>
 					<div class="input-demo-item">
@@ -287,9 +301,9 @@ const toggleError = () => {
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Validation (Must be 'Pro')</span>
-						<Input 
-							type="dropdown" 
-							v-model="settings.fixed" 
+						<Input
+							type="dropdown"
+							v-model="settings.fixed"
 							:options="advancedOptions"
 							:validators="[(v) => v !== 'pro' ? 'Only Pro Plan is allowed' : null]"
 						/>
@@ -361,25 +375,25 @@ const toggleError = () => {
 
 header h1 {
 	font-size: 2.5rem;
-	color: var(--text-3);
+	color: var(--text-0);
 	margin-bottom: 0.5rem;
 }
 
 header p {
-	color: var(--text-1);
+	color: var(--text-2);
 	font-size: 1.125rem;
 }
 
 .component-section h2 {
 	font-size: 1.5rem;
-	color: var(--text-3);
+	color: var(--text-0);
 	margin-bottom: 1rem;
 	padding-bottom: 0.5rem;
 	border-bottom: 1px solid var(--surface-2);
 }
 
 .description {
-	color: var(--text-1);
+	color: var(--text-2);
 	margin-bottom: 1.5rem;
 	font-size: 0.9375rem;
 }
@@ -411,7 +425,7 @@ header p {
 	font-size: 0.875rem;
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
-	color: var(--text-0);
+	color: var(--text-3);
 	font-weight: 700;
 }
 
@@ -434,7 +448,7 @@ header p {
 .switch-demo-item .label {
 	font-size: 0.875rem;
 	font-weight: 700;
-	color: var(--text-1);
+	color: var(--text-2);
 }
 
 .input-demo-item {
@@ -446,17 +460,17 @@ header p {
 .input-demo-item .label {
 	font-size: 0.875rem;
 	font-weight: 700;
-	color: var(--text-1);
+	color: var(--text-2);
 }
 
 .hint {
 	font-size: 0.75rem;
-	color: var(--text-0);
+	color: var(--text-3);
 	margin-top: -0.25rem;
 }
 
 .hint strong {
-	color: var(--text-1);
+	color: var(--text-2);
 }
 
 .size-demo {
