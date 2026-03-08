@@ -17,24 +17,16 @@ import fs from 'fs';
 import path from 'path';
 
 import { Server, sendJson } from '../index';
-import {
-    buildEmptyPage,
-    buildExternalCounters,
-    buildInstructionLocal,
-    buildLocalCounters,
-    buildSettings,
-    getLocalCounters,
-    saveSettings
-} from '../utils/counters';
+import { getLocalCounters, saveSettings } from '../utils/counters';
 import { ISettings } from '../utils/counters.types';
 import { directoryWalker } from '../utils/directories';
 import { parseCounterSettings } from '../utils/parseSettings';
 import { generateReport, generateReportHTML } from '../utils/report';
 
-const pkgAssetsPath =
-    'pkg' in process
-        ? path.join(__dirname, 'assets')
-        : path.join(__dirname, '../assets');
+// const pkgAssetsPath =
+//     'pkg' in process
+//         ? path.join(__dirname, 'assets')
+//         : path.join(__dirname, '../assets');
 
 export default function buildBaseApi(server: Server) {
     server.app.route('/json', 'GET', (req, res) => {
@@ -57,21 +49,14 @@ export default function buildBaseApi(server: Server) {
                 .replace(/[^a-z0-9A-Z]/, '')
                 .toLowerCase();
 
-            const parseAddress = new URL(
-                req.headers.host
-                    ? `http://${req.headers.host}/`
-                    : req.headers.referer ||
-                          `http://${req.socket.remoteAddress}/`
-            );
+            const counters = getLocalCounters().filter((item) => {
+                return (
+                    item.name.toLowerCase().includes(query) ||
+                    item.author.toLowerCase().includes(query)
+                );
+            });
 
-            const parseReferer = new URL(
-                req.headers.referer || `http://${req.socket.remoteAddress}/`
-            );
-            if (parseReferer.pathname === `/available`) {
-                return buildExternalCounters(res, parseAddress.hostname, query);
-            }
-
-            return buildLocalCounters(res, parseAddress.hostname, query);
+            return sendJson(res, counters);
         }
     );
 
@@ -449,46 +434,6 @@ export default function buildBaseApi(server: Server) {
         }
     });
 
-    server.app.route(/\/api\/ingame/, 'GET', (req, res) => {
-        fs.readFile(
-            path.join(pkgAssetsPath, 'ingame.html'),
-            'utf8',
-            (err, content) => {
-                if (err) {
-                    wLogger.debug(`Failed to read ingame.html:`, err);
-                    res.writeHead(500);
-                    return res.end(`Server Error: ${err.code}`);
-                }
-
-                const counters = getLocalCounters();
-                content += `\n\n\n<script>\rwindow.COUNTERS = ${JSON.stringify(counters)}\r</script>\n`;
-
-                res.writeHead(200, {
-                    'Content-Type': 'text/html; charset=utf-8'
-                });
-                res.end(content, 'utf-8');
-            }
-        );
-    });
-
-    server.app.route('/favicon.ico', 'GET', (req, res) => {
-        fs.readFile(path.join(pkgAssetsPath, 'favicon.ico'), (err, content) => {
-            if (err) {
-                wLogger.debug(`Failed to read favicon.ico:`, err);
-                res.writeHead(404, { 'Content-Type': 'text/html' });
-
-                res.end('<html>page not found</html>');
-                return;
-            }
-
-            res.writeHead(200, {
-                'Content-Type': 'image/vnd.microsoft.icon; charset=utf-8'
-            });
-
-            res.end(content);
-        });
-    });
-
     server.app.route(/.*/, 'GET', async (req, res) => {
         const url = req.pathname || '/';
         try {
@@ -496,32 +441,6 @@ export default function buildBaseApi(server: Server) {
                 res.statusCode = 404;
                 res.statusMessage = 'Not Found';
                 return res.end();
-            }
-
-            if (url === '/') {
-                const parseAddress = new URL(
-                    req.headers.host
-                        ? `http://${req.headers.host}/`
-                        : req.headers.referer ||
-                              `http://${req.socket.remoteAddress}/`
-                );
-
-                return buildLocalCounters(res, parseAddress.hostname);
-            }
-
-            if (url === '/settings') {
-                if (req.query.overlay) return buildEmptyPage(res);
-                return buildSettings(res);
-            }
-            if (url === '/local-overlays') return buildInstructionLocal(res);
-            if (url === '/available') {
-                const parseAddress = new URL(
-                    req.headers.host
-                        ? `http://${req.headers.host}/`
-                        : req.headers.referer ||
-                              `http://${req.socket.remoteAddress}/`
-                );
-                return buildExternalCounters(res, parseAddress.hostname);
             }
 
             const staticPath = getStaticPath();
