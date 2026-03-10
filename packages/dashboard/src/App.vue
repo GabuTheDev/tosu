@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { computed, type Component } from 'vue';
+import { computed, onMounted, type Component } from 'vue';
 import { useRoute } from 'vue-router';
 import ModalRoot from '@/components/ModalRoot.vue';
+import StatusBlock from '@/components/StatusBlock.vue';
+import { useSettings } from '@/composables/useSettings';
+
+const { fetchSettings } = useSettings();
+
+onMounted(() => fetchSettings());
 
 const layoutModules = import.meta.glob<Component>('./layouts/*.vue', {
 	eager: true,

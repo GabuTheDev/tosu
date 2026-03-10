@@ -1,8 +1,10 @@
 import rosu from '@kotrikd/rosu-pp';
 import {
-    ConfigBinding,
+    ConfigKey,
     ConfigManager,
     JsonSafeParse,
+    config,
+    defaultSchema,
     downloadFile,
     getCachePath,
     getProgramPath,
@@ -22,11 +24,6 @@ import { ISettings } from '../utils/counters.types';
 import { directoryWalker } from '../utils/directories';
 import { parseCounterSettings } from '../utils/parseSettings';
 import { generateReport, generateReportHTML } from '../utils/report';
-
-// const pkgAssetsPath =
-//     'pkg' in process
-//         ? path.join(__dirname, 'assets')
-//         : path.join(__dirname, '../assets');
 
 export default function buildBaseApi(server: Server) {
     server.app.route('/json', 'GET', (req, res) => {
@@ -328,21 +325,33 @@ export default function buildBaseApi(server: Server) {
         }
     );
 
-    server.app.route('/api/runUpdates', 'GET', (req, res) =>
-        autoUpdater('server', res)
-    );
+    server.app.route('/api/settings', 'GET', (req, res) => {
+        return sendJson(res, config);
+    });
 
-    server.app.route('/api/settingsSave', 'POST', async (req, res) => {
-        const body: Record<ConfigBinding, string> | Error = JsonSafeParse({
+    server.app.route('/api/settings', 'PATCH', async (req, res) => {
+        const body: Record<string, any> | Error = JsonSafeParse({
             isFile: false,
             payload: req.body,
             defaultValue: new Error('Failed to parse body')
         });
         if (body instanceof Error) throw body;
 
-        ConfigManager.refreshConfig(body, true);
+        const transformed: Record<string, string> = {};
+        for (const [key, value] of Object.entries(body)) {
+            const schemaItem = defaultSchema[key as ConfigKey];
+            if (schemaItem) {
+                transformed[schemaItem.binding] = String(value);
+            }
+        }
+
+        ConfigManager.refreshConfig(transformed, true);
         return sendJson(res, { status: 'updated' });
     });
+
+    server.app.route('/api/runUpdates', 'GET', (req, res) =>
+        autoUpdater('server', res)
+    );
 
     server.app.route('/api/calculate/pp', 'GET', (req, res) => {
         const query: any = req.query;

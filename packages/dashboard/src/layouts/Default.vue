@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import Sidebar, { type SidebarItem } from '@/components/Sidebar.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import StatusBlock from '@/components/StatusBlock.vue';
+import { useSettings } from '@/composables/useSettings';
 import solidSprite from '@/assets/sprites/solid.svg';
 import brandsSprite from '@/assets/sprites/brands.svg';
+
+const { triggerManualError, triggerManualLoading } = useSettings();
 
 const tabs: SidebarItem[] = [
 	{ name: 'Home', path: '/', icon: 'house' },
@@ -21,6 +25,7 @@ const footerTabs: SidebarItem[] = [
 	<div class="layout">
 		<Sidebar :tabs="tabs" :footer-tabs="footerTabs" />
 		<main>
+			<StatusBlock />
 			<header>
 				<Breadcrumbs />
 
@@ -48,6 +53,16 @@ const footerTabs: SidebarItem[] = [
 					<button class="credits-btn" title="Show Credits">
 						<svg class="fa-icon">
 							<use :href="`${solidSprite}#circle-info`" />
+						</svg>
+					</button>
+					<button class="credits-btn" @click="triggerManualLoading" title="Simulate Loading State">
+						<svg class="fa-icon">
+							<use :href="`${solidSprite}#spinner`" />
+						</svg>
+					</button>
+					<button class="credits-btn" @click="triggerManualError" title="Simulate Connection Error">
+						<svg class="fa-icon">
+							<use :href="`${solidSprite}#bug`" />
 						</svg>
 					</button>
 				</div>
@@ -84,6 +99,7 @@ main {
 	flex-direction: column;
 	min-width: 0;
 	background-color: var(--surface-0);
+	position: relative;
 }
 
 header {

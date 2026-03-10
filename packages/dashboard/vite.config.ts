@@ -9,6 +9,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
+			'@tosu/common': fileURLToPath(new URL('../common', import.meta.url)),
 		},
 	},
 	server: {
@@ -16,12 +17,10 @@ export default defineConfig({
 			'/api': {
 				target: 'http://127.0.0.1:24050',
 				changeOrigin: true,
-				rewrite: (path) => path.replace(/^\/api/, ''),
 			},
 			'/ws': {
 				target: 'ws://127.0.0.1:24050',
 				ws: true,
-				rewrite: (path) => path.replace(/^\/ws/, ''),
 			},
 		},
 	},
