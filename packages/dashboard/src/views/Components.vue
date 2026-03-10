@@ -2,6 +2,9 @@
 import { ref, reactive } from 'vue';
 import { useModal } from '@/composables/useModal';
 import Button from '@/components/Button.vue';
+import Input from '@/components/Input.vue';
+import SettingItem, { type Action } from '@/components/SettingItem.vue';
+import { type DropdownOption } from '@/components/inputs/Dropdown.vue';
 
 const { open } = useModal();
 
@@ -38,9 +41,6 @@ const testColoredPrompt = async () => {
 	});
 	console.log('Colored prompt result:', result);
 };
-import Input from '@/components/Input.vue';
-import SettingItem, { type Action } from '@/components/SettingItem.vue';
-import { type DropdownOption } from '@/components/inputs/Dropdown.vue';
 
 const defaults = {
 	identifier: 'GabuTheDesigner',
@@ -145,7 +145,7 @@ const toggleError = () => {
 					:extra-actions="extraActions"
 					can-erase
 				>
-					<Input type="text" v-model="settings.identifier" placeholder="Edit to show Reset/Erase..." />
+					<Input v-model="settings.identifier" type="text" placeholder="Edit to show Reset/Erase..." />
 				</SettingItem>
 			</div>
 		</section>
@@ -194,8 +194,8 @@ const toggleError = () => {
 				<div class="group input-group">
 					<h3>Text Input final final v3</h3>
 					<Input
-						type="text"
 						v-model="settings.identifier"
+						type="text"
 						placeholder="mrekk"
 						:debounce="500"
 					/>
@@ -206,19 +206,19 @@ const toggleError = () => {
 					<h3>Text Input Scenarios</h3>
 					<div class="input-demo-item">
 						<span class="label">Standard Text</span>
-						<Input type="text" v-model="settings.identifier" placeholder="Username" />
+						<Input v-model="settings.identifier" type="text" placeholder="Username" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Password</span>
-						<Input type="password" v-model="settings.passwordValue" placeholder="Enter password..." />
+						<Input v-model="settings.passwordValue" type="password" placeholder="Enter password..." />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Email (Validated)</span>
-						<Input type="email" v-model="settings.emailValue" :validators="textValidators.email" />
+						<Input v-model="settings.emailValue" type="email" :validators="textValidators.email" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Character Limit (5-15)</span>
-						<Input type="text" v-model="settings.limitedValue" :validators="textValidators.length" />
+						<Input v-model="settings.limitedValue" type="text" :validators="textValidators.length" />
 					</div>
 					<p class="value-preview">Email: {{ settings.emailValue }} | Pwd: {{ '*'.repeat(settings.passwordValue.length) }}</p>
 				</div>
@@ -227,27 +227,27 @@ const toggleError = () => {
 					<h3>Textarea Scenarios</h3>
 					<div class="input-demo-item">
 						<span class="label">Default (3 rows)</span>
-						<Input type="textarea" v-model="settings.notes" placeholder="Tell us more..." />
+						<Input v-model="settings.notes" type="textarea" placeholder="Tell us more..." />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Fixed Height (6 rows, no resize)</span>
-						<Input type="textarea" v-model="settings.notes" :rows="6" resize="none" />
+						<Input v-model="settings.notes" type="textarea" :rows="6" resize="none" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Auto-Resize Vertical (Default)</span>
-						<Input type="textarea" v-model="settings.notes" resize="vertical" />
+						<Input v-model="settings.notes" type="textarea" resize="vertical" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Horizontal Resize Only</span>
-						<Input type="textarea" v-model="settings.notes" resize="horizontal" />
+						<Input v-model="settings.notes" type="textarea" resize="horizontal" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Resize Both Axis</span>
-						<Input type="textarea" v-model="settings.notes" resize="both" />
+						<Input v-model="settings.notes" type="textarea" resize="both" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">With Min/Max Height</span>
-						<Input type="textarea" v-model="settings.notes" min-height="100px" max-height="200px" />
+						<Input v-model="settings.notes" type="textarea" min-height="100px" max-height="200px" />
 					</div>
 				</div>
 
@@ -256,9 +256,9 @@ const toggleError = () => {
 					<div class="input-demo-item">
 						<span class="label">Polling Rate (0-100, Multi-Validated)</span>
 						<Input
-							type="number"
 							v-model="settings.quantity"
 							v-model:error="settings.quantityError"
+							type="number"
 							:min="0"
 							:max="100"
 							:validators="pollingValidators"
@@ -272,9 +272,9 @@ const toggleError = () => {
 					<div class="input-demo-item">
 						<span class="label">Manual Error Toggle</span>
 						<Input
-							type="number"
 							v-model="settings.quantity"
 							v-model:error="errorText"
+							type="number"
 						/>
 						<Button variant="secondary" class="error-toggle" @click="toggleError">Toggle Error</Button>
 					</div>
@@ -284,11 +284,11 @@ const toggleError = () => {
 					<h3>Integer vs Decimal</h3>
 					<div class="input-demo-item">
 						<span class="label">Integer (Precision: 0)</span>
-						<Input type="number" v-model="settings.quantity" />
+						<Input v-model="settings.quantity" type="number" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Decimal (Precision: 2, Step: 0.1)</span>
-						<Input type="number" v-model="settings.decimalValue" :precision="2" :step="0.1" />
+						<Input v-model="settings.decimalValue" type="number" :precision="2" :step="0.1" />
 					</div>
 					<p class="value-preview">Int: {{ settings.quantity }} | Float: {{ settings.decimalValue }}</p>
 				</div>
@@ -297,15 +297,15 @@ const toggleError = () => {
 					<h3>Keybind Scenarios</h3>
 					<div class="input-demo-item">
 						<span class="label">Standard Recorder</span>
-						<Input type="keybind" v-model="settings.keybindValue" />
+						<Input v-model="settings.keybindValue" type="keybind" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Must include 'Control'</span>
-						<Input type="keybind" v-model="settings.keybindValue" :validators="textValidators.mustControl" />
+						<Input v-model="settings.keybindValue" type="keybind" :validators="textValidators.mustControl" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Max 2 Keys</span>
-						<Input type="keybind" v-model="settings.keybindValue" :max-keys="2" />
+						<Input v-model="settings.keybindValue" type="keybind" :max-keys="2" />
 					</div>
 				</div>
 
@@ -313,19 +313,19 @@ const toggleError = () => {
 					<h3>Chip Scenarios</h3>
 					<div class="input-demo-item">
 						<span class="label">Standard Tags</span>
-						<Input type="chips" v-model="settings.tags" placeholder="Add tag..." />
+						<Input v-model="settings.tags" type="chips" placeholder="Add tag..." />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Validated (No small letters)</span>
 						<Input
-							type="chips"
 							v-model="settings.tags"
+							type="chips"
 							:validators="[(v) => /[a-z]/.test(v) ? 'Only uppercase allowed' : null]"
 						/>
 					</div>
 					<div class="input-demo-item">
 						<span class="label">With Static Pinned Item</span>
-						<Input type="chips" v-model="settings.tags" :static-chips="['Pinned']" />
+						<Input v-model="settings.tags" type="chips" :static-chips="['Pinned']" />
 					</div>
 				</div>
 
@@ -333,17 +333,17 @@ const toggleError = () => {
 					<h3>Dropdown Scenarios</h3>
 					<div class="input-demo-item">
 						<span class="label">Standard Searchable</span>
-						<Input type="dropdown" v-model="settings.theme" :options="themeOptions" />
+						<Input v-model="settings.theme" type="dropdown" :options="themeOptions" />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">With Icons & Links</span>
-						<Input type="dropdown" v-model="settings.fixed" :options="advancedOptions" placeholder="Select a plan..." />
+						<Input v-model="settings.fixed" type="dropdown" :options="advancedOptions" placeholder="Select a plan..." />
 					</div>
 					<div class="input-demo-item">
 						<span class="label">Validation (Must be 'Pro')</span>
 						<Input
-							type="dropdown"
 							v-model="settings.fixed"
+							type="dropdown"
 							:options="advancedOptions"
 							:validators="[(v) => v !== 'pro' ? 'Only Pro Plan is allowed' : null]"
 						/>
@@ -355,15 +355,15 @@ const toggleError = () => {
 					<div class="button-row">
 						<div class="switch-demo-item">
 							<span class="label">Enable Features</span>
-							<Input type="switch" v-model="settings.enabled" />
+							<Input v-model="settings.enabled" type="switch" />
 						</div>
 						<div class="switch-demo-item">
 							<span class="label">Debug Mode</span>
-							<Input type="switch" v-model="settings.debug" />
+							<Input v-model="settings.debug" type="switch" />
 						</div>
 						<div class="switch-demo-item">
 							<span class="label">Disabled Toggle</span>
-							<Input type="switch" v-model="settings.debug" disabled />
+							<Input v-model="settings.debug" type="switch" disabled />
 						</div>
 					</div>
 					<p class="value-preview">Enabled: {{ settings.enabled }} | Debug: {{ settings.debug }}</p>
@@ -380,7 +380,7 @@ const toggleError = () => {
 					description="Use GPU to render the dashboard for better performance."
 					:default-value="defaults.enabled"
 				>
-					<Input type="switch" v-model="settings.enabled" />
+					<Input v-model="settings.enabled" type="switch" />
 				</SettingItem>
 
 				<SettingItem
@@ -389,7 +389,7 @@ const toggleError = () => {
 					description="How often to read memory from the game. Lower values are more responsive but use more CPU."
 					:default-value="defaults.quantity"
 				>
-					<Input type="number" v-model="settings.quantity" :min="1" :max="1000"/>
+					<Input v-model="settings.quantity" type="number" :min="1" :max="1000"/>
 				</SettingItem>
 
 				<SettingItem
@@ -399,7 +399,7 @@ const toggleError = () => {
 					:default-value="defaults.identifier"
 					can-erase
 				>
-					<Input type="text" v-model="settings.identifier" placeholder="Enter ID..." />
+					<Input v-model="settings.identifier" type="text" placeholder="Enter ID..." />
 				</SettingItem>
 			</div>
 		</section>

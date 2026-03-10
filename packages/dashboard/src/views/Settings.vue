@@ -142,7 +142,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Choose your preferred dashboard visual style."
 						:default-value="defaultSettings.theme"
 					>
-						<Input type="dropdown" v-model="settings.theme" :options="themeOptions" />
+						<Input v-model="settings.theme" type="dropdown" :options="themeOptions" />
 					</SettingItem>
 
 					<SettingItem
@@ -151,7 +151,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Automatically launch the dashboard when your computer starts."
 						:default-value="defaultSettings.openOnStartup"
 					>
-						<Input type="switch" v-model="settings.openOnStartup" />
+						<Input v-model="settings.openOnStartup" type="switch" />
 					</SettingItem>
 				</div>
 
@@ -163,7 +163,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Enable the high-performance overlay directly inside osu!."
 						:default-value="defaultSettings.enableIngameOverlay"
 					>
-						<Input type="switch" v-model="settings.enableIngameOverlay" />
+						<Input v-model="settings.enableIngameOverlay" type="switch" />
 					</SettingItem>
 
 					<SettingItem
@@ -173,7 +173,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.ingameOverlayKeybind"
 						:disabled="!settings.enableIngameOverlay"
 					>
-						<Input type="keybind" v-model="settings.ingameOverlayKeybind" :disabled="!settings.enableIngameOverlay" />
+						<Input v-model="settings.ingameOverlayKeybind" type="keybind" :disabled="!settings.enableIngameOverlay" />
 					</SettingItem>
 
 					<SettingItem
@@ -183,7 +183,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.ingameOverlayMaxFps"
 						:disabled="!settings.enableIngameOverlay"
 					>
-						<Input type="number" v-model="settings.ingameOverlayMaxFps" :min="1" :max="999" :disabled="!settings.enableIngameOverlay" />
+						<Input v-model="settings.ingameOverlayMaxFps" type="number" :min="1" :max="999" :disabled="!settings.enableIngameOverlay" />
 					</SettingItem>
 				</div>
 
@@ -195,7 +195,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Allow real-time calculation of performance points during gameplay."
 						:default-value="defaultSettings.calculatePP"
 					>
-						<Input type="switch" v-model="settings.calculatePP" />
+						<Input v-model="settings.calculatePP" type="switch" />
 					</SettingItem>
 
 					<SettingItem
@@ -204,7 +204,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Select the version of the rosu-pp engine to use."
 						:default-value="defaultSettings.ppVersion"
 					>
-						<Input type="dropdown" v-model="settings.ppVersion" :options="ppVersionOptions" />
+						<Input v-model="settings.ppVersion" type="dropdown" :options="ppVersionOptions" />
 					</SettingItem>
 
 					<SettingItem
@@ -213,7 +213,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Enable live retrieval of K1/K2/M1/M2 keypresses."
 						:default-value="defaultSettings.enableKeyOverlay"
 					>
-						<Input type="switch" v-model="settings.enableKeyOverlay" />
+						<Input v-model="settings.enableKeyOverlay" type="switch" />
 					</SettingItem>
 				</div>
 
@@ -227,9 +227,9 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						can-erase
 					>
 						<Input
-							type="text"
 							v-model="settings.serverIp"
 							v-model:error="errors.serverIp"
+							type="text"
 							placeholder="127.0.0.1"
 							:validators="validators.ip"
 						/>
@@ -242,9 +242,9 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.serverPort"
 					>
 						<Input
-							type="number"
 							v-model="settings.serverPort"
 							v-model:error="errors.serverPort"
+							type="number"
 							:min="1024"
 							:max="65535"
 							:validators="validators.port"
@@ -258,9 +258,9 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.pollRate"
 					>
 						<Input
-							type="number"
 							v-model="settings.pollRate"
 							v-model:error="errors.pollRate"
+							type="number"
 							:min="100"
 							:validators="validators.pollRate"
 						/>
@@ -273,9 +273,9 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.precisePollRate"
 					>
 						<Input
-							type="number"
 							v-model="settings.precisePollRate"
 							v-model:error="errors.precisePollRate"
+							type="number"
 							:min="0"
 							:validators="validators.precisePollRate"
 						/>
@@ -289,8 +289,8 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						vertical
 					>
 						<Input
-							type="chips"
 							v-model="settings.allowedIps"
+							type="chips"
 							placeholder="e.g. 192.168.1.1"
 							:validators="validators.ip"
 							:static-chips="[settings.serverIp]"
@@ -306,7 +306,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Check for and install updates automatically on startup."
 						:default-value="defaultSettings.autoUpdate"
 					>
-						<Input type="switch" v-model="settings.autoUpdate" />
+						<Input v-model="settings.autoUpdate" type="switch" />
 					</SettingItem>
 
 					<SettingItem
@@ -315,7 +315,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Verbose logging. May impact performance."
 						:default-value="defaultSettings.debugMode"
 					>
-						<Input type="switch" v-model="settings.debugMode" />
+						<Input v-model="settings.debugMode" type="switch" />
 					</SettingItem>
 
 					<SettingItem
@@ -324,7 +324,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						description="Show bancho !mp commands in tournament manager."
 						:default-value="defaultSettings.showMpCommands"
 					>
-						<Input type="switch" v-model="settings.showMpCommands" />
+						<Input v-model="settings.showMpCommands" type="switch" />
 					</SettingItem>
 
 					<SettingItem
@@ -334,7 +334,7 @@ const tabs: { id: Tab; label: string; icon: string }[] = [
 						:default-value="defaultSettings.staticFolderPath"
 						can-erase
 					>
-						<Input type="text" v-model="settings.staticFolderPath" />
+						<Input v-model="settings.staticFolderPath" type="text" />
 					</SettingItem>
 				</div>
 			</Transition>

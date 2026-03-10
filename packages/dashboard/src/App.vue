@@ -18,7 +18,7 @@ const route = useRoute();
 
 const layout = computed(() => {
 	const layoutName = route.meta?.layout as string;
-	return layouts[layoutName] || layouts['DefaultLayout'];
+	return layouts[layoutName] || layouts.DefaultLayout;
 });
 </script>
 
