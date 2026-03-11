@@ -11,6 +11,10 @@ function isPathDirectory(path: string) {
     return Boolean(stat && stat.isDirectory());
 }
 
+/**
+ * @deprecated Legacy HTML-based directory walker. Use walkDirectory from @tosu/common for filesystem operations.
+ * TODO: remove before release
+ */
 export function directoryWalker({
     _htmlRedirect,
     res,

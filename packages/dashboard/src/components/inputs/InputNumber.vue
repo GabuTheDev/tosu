@@ -42,9 +42,6 @@ const ui = reactive({
 	isReady: false,
 });
 
-/**
- * 1. Sanitization & Validation
- */
 const sanitizeValue = (val: number): number => {
 	if (!isFinite(val)) {
 		if (val > 0) return props.max ?? Number.MAX_SAFE_INTEGER;
@@ -72,9 +69,6 @@ const runValidation = (val: number): string | undefined => {
 	return undefined;
 };
 
-/**
- * 2. Interaction Handlers
- */
 const onKeydown = (e: KeyboardEvent) => {
 	const key = e.key.toLowerCase();
 	const target = e.target as HTMLInputElement;
@@ -143,9 +137,6 @@ const onBlur = (event: FocusEvent) => {
 	emit('blur', event);
 };
 
-/**
- * 3. Step Logic
- */
 const stepValue = (amount: number) => {
 	let nextVal = sanitizeValue(ui.display + amount);
 
@@ -180,9 +171,6 @@ const decrement = (e: MouseEvent) => {
 	stepValue(-props.step * multiplier);
 };
 
-/**
- * 4. UI Helpers
- */
 const checkTooltipPosition = () => {
 	if ((!error.value && !ui.showHelp) || !containerRef.value) {
 		ui.isReady = false;
@@ -209,7 +197,6 @@ const toggleHelp = (visible: boolean) => {
 
 const getIcon = (name: string): string => `${solidSprite}#${name}`;
 
-// Sync
 watch(model, (newVal) => {
 	ui.display = sanitizeValue(newVal);
 	ui.lastValid = ui.display;
@@ -291,7 +278,6 @@ onUnmounted(() => {
 			</div>
 		</div>
 
-		<!-- Teleported Tooltips -->
 		<Teleport to="body">
 			<transition name="tooltip-fade">
 				<div

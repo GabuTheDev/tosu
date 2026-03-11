@@ -77,13 +77,19 @@ export function getContentType(text: string) {
     return contentType;
 }
 
-export function sendJson(response: http.ServerResponse, json: object | any[]) {
+export function sendJson(
+    response: http.ServerResponse,
+    json: object | any[],
+    code = 200
+) {
+    response.statusCode = code;
     response.setHeader('Content-Type', 'application/json');
 
     try {
         return response.end(JSON.stringify(json));
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+        response.statusCode = 500;
         return response.end(JSON.stringify({ error: 'Json parsing error' }));
     }
 }

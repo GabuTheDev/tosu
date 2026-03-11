@@ -1,14 +1,14 @@
 import { GlobalConfig, config, wLogger } from '@tosu/common';
 
-import buildAssetsApi from './router/assets';
+import buildCountersApi from './router/counters';
 import buildBaseApi from './router/index';
 import buildSCApi from './router/scApi';
 import buildSocket from './router/socket';
 import buildV1Api from './router/v1';
 import buildV2Api from './router/v2';
+import { isRequestAllowed } from './utils';
 import { handleSocketCommands } from './utils/commands';
 import { HttpServer } from './utils/http';
-import { isRequestAllowed } from './utils/index';
 import { Websocket } from './utils/socket';
 
 export class Server {
@@ -60,9 +60,10 @@ export class Server {
             onMessageCallback: handleSocketCommands
         });
 
-        buildAssetsApi(this);
+        // buildAssetsApi(this);
         buildV1Api(this.app);
         buildSCApi(this.app);
+        buildCountersApi(this.app);
 
         buildV2Api(this.app);
 

@@ -4,6 +4,8 @@ import http, { IncomingMessage, ServerResponse } from 'http';
 
 import { sendJson } from './index';
 
+export { ServerResponse };
+
 export interface ExtendedIncomingMessage extends IncomingMessage {
     instanceManager: any;
     body: string;
@@ -13,7 +15,8 @@ export interface ExtendedIncomingMessage extends IncomingMessage {
     getContentType: (text: string) => string;
     sendJson: (
         response: http.ServerResponse,
-        json: object | any[]
+        json: object | any[],
+        code?: number
     ) => http.ServerResponse<http.IncomingMessage>;
 }
 

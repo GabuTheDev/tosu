@@ -10,6 +10,10 @@ export function ensureDirectoryExists(dir: string) {
     }
 }
 
+/**
+ * @deprecated Legacy filesystem search utility. Use walkDirectory instead.
+ * TODO: remove before release
+ */
 export function recursiveFilesSearch({
     _ignoreFileName,
     dir,
@@ -112,4 +116,87 @@ export function getConfigPath() {
         return configPath;
     }
     return getProgramPath();
+}
+
+export function getDashboardPath() {
+    const programPath = getProgramPath();
+
+    // TODO: Redo this mess too, bich
+    const locations = [
+        path.join(getDataPath(), 'dashboard'),
+        path.join(programPath, 'packages', 'dashboard', 'dist'),
+        path.join(programPath, '..', 'dashboard', 'dist'),
+        path.join(programPath, '..', '..', 'dashboard', 'dist'),
+        path.join(programPath, 'dist')
+    ];
+
+    for (const loc of locations) {
+        if (fs.existsSync(path.join(loc, 'index.html'))) {
+            return path.resolve(loc);
+        }
+    }
+
+    // Default fallback
+    return path.resolve(
+        path.join(programPath, 'packages', 'dashboard', 'dist')
+    );
+}
+
+export interface DirectoryEntry {
+    path: string;
+    name: string;
+    type?: 'file' | 'directory' | 'other';
+    stat?: fs.Stats;
+}
+
+export function walkDirectory(
+    dirPath: string,
+    options: {
+        maxDepth?: number;
+        detailed?: boolean;
+        includeTypes?: boolean;
+    } = {},
+    _currentDepth = 0
+): DirectoryEntry[] {
+    const { maxDepth = 0, detailed = false, includeTypes = true } = options;
+    const results: DirectoryEntry[] = [];
+
+    if (!fs.existsSync(dirPath)) return results;
+
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+
+    for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
+        const result: DirectoryEntry = {
+            path: fullPath,
+            name: entry.name
+        };
+
+        if (includeTypes) {
+            result.type = entry.isDirectory()
+                ? 'directory'
+                : entry.isFile()
+                  ? 'file'
+                  : 'other';
+        }
+
+        if (detailed) {
+            try {
+                result.stat = fs.statSync(fullPath);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (err) {
+                // TODO: За двумя зайцами погонишься — ни одного не поймаешь.
+            }
+        }
+
+        results.push(result);
+
+        if (entry.isDirectory() && _currentDepth < maxDepth) {
+            results.push(
+                ...walkDirectory(fullPath, options, _currentDepth + 1)
+            );
+        }
+    }
+
+    return results;
 }

@@ -1,3 +1,7 @@
+/**
+ * TODO: remove before release
+ * This file is deprecated and will be replaced by the new server-side counter discovery logic.
+ */
 import {
     JsonSafeParse,
     getStaticPath,
