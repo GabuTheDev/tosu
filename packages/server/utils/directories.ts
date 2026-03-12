@@ -1,4 +1,4 @@
-import { getStaticPath, wLogger } from '@tosu/common';
+import { getStaticPath, wLogger, walkDirectory } from '@tosu/common';
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
@@ -6,164 +6,101 @@ import path from 'path';
 import { getContentType } from '../index';
 import { OVERLAYS_STATIC } from './homepage';
 
-function isPathDirectory(path: string) {
-    const stat = fs.statSync(path);
-    return Boolean(stat && stat.isDirectory());
-}
-
-/**
- * @deprecated Legacy HTML-based directory walker. Use walkDirectory from @tosu/common for filesystem operations.
- * TODO: remove before release
- */
-export function directoryWalker({
-    _htmlRedirect,
+export function serveStatic({
     res,
     baseUrl,
     folderPath,
     pathname
 }: {
-    _htmlRedirect?: boolean;
-
     res: http.ServerResponse;
     baseUrl: string;
-
     pathname: string;
     folderPath: string;
 }) {
     let cleanedUrl;
     try {
         cleanedUrl = decodeURIComponent(pathname);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-        res.writeHead(404, {
-            'Content-Type': getContentType('file.txt')
-        });
-        res.end('');
+    } catch {
+        res.writeHead(404);
+        res.end();
         return;
     }
 
-    const contentType = getContentType(cleanedUrl);
     const filePath = path.join(folderPath, cleanedUrl);
 
-    const isDirectory = isPathDirectory(filePath);
-    const isHTML = filePath.endsWith('.html');
+    if (!fs.existsSync(filePath)) {
+        res.writeHead(404);
+        res.end('Not Found');
+        return;
+    }
 
-    if (isDirectory) {
+    const stats = fs.statSync(filePath);
+
+    if (stats.isDirectory()) {
         if (!baseUrl.endsWith('/')) {
-            res.writeHead(301, {
-                Location: baseUrl + '/'
-            });
+            res.writeHead(301, { Location: baseUrl + '/' });
             res.end();
             return;
         }
 
-        return readDirectory(filePath, baseUrl, (html: Error | string) => {
-            if (html instanceof Error) {
-                res.writeHead(404, { 'Content-Type': 'text/html' });
-                res.end('404 Not Found');
-                return;
-            }
+        const indexPath = path.join(filePath, 'index.html');
+        if (fs.existsSync(indexPath)) {
+            return serveFile(res, indexPath);
+        }
 
-            res.writeHead(200, {
-                'Content-Type': getContentType('file.html')
-            });
-            res.end(html);
+        // TODO: Revisit directory listing feature and OVERLAYS_STATIC usage
+        const entries = walkDirectory(filePath, { maxDepth: 0 });
+        const htmlEntries = entries.map((entry) => {
+            const isDir = entry.type === 'directory';
+            const name = entry.name + (isDir ? '/' : '');
+            return `<li><a href="${baseUrl}${encodeURIComponent(entry.name)}${isDir ? '/' : ''}">${name}</a></li>`;
         });
+
+        const html = OVERLAYS_STATIC.replace(
+            '{OVERLAYS_LIST}',
+            htmlEntries.join('\n')
+        ).replace('{PAGE_URL}', `tosu - ${baseUrl}`);
+
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(html);
+        return;
     }
 
-    return fs.readFile(
-        filePath,
-        isHTML === true ? 'utf8' : null,
-        (err, content) => {
-            if (err?.code === 'ENOENT' && _htmlRedirect === true) {
-                return readDirectory(
-                    filePath.replace('index.html', ''),
-                    baseUrl,
-                    (html: Error | string) => {
-                        if (html instanceof Error) {
-                            res.writeHead(404, { 'Content-Type': 'text/html' });
-                            res.end('404 Not Found');
-                            return;
-                        }
-
-                        if (isHTML === true) {
-                            html = addCounterMetadata(html, filePath);
-                        }
-
-                        res.writeHead(200, {
-                            'Content-Type': getContentType('file.html')
-                        });
-                        res.end(html);
-                    }
-                );
-            }
-
-            if (err?.code === 'ENOENT') {
-                res.writeHead(404, { 'Content-Type': 'text/html' });
-                res.end('404 Not Found');
-                return;
-            }
-
-            if (err) {
-                res.writeHead(500);
-                res.end(`Server Error: ${err.code}`);
-                return;
-            }
-
-            if (isHTML === true) {
-                content = addCounterMetadata(content.toString(), filePath);
-            }
-
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
-        }
-    );
+    return serveFile(res, filePath);
 }
 
-export function readDirectory(
-    folderPath: string,
-    url: string,
-    callback: Function
-) {
-    fs.readdir(folderPath, (err, folders) => {
-        if (err) {
-            return callback(new Error(`Files not found: ${folderPath}`));
-        }
+function serveFile(res: http.ServerResponse, filePath: string) {
+    const contentType = getContentType(filePath);
+    const isHTML = filePath.endsWith('.html');
 
-        const html = folders.map((r) => {
-            const slashAtTheEnd = getContentType(r) === '' ? '/' : '';
-
-            return `<li><a href="${url === '/' ? '' : url}${encodeURIComponent(r)}${slashAtTheEnd}">${r}</a></li>`;
-        });
-
-        return callback(
-            OVERLAYS_STATIC.replace('{OVERLAYS_LIST}', html.join('\n')).replace(
-                '{PAGE_URL}',
-                `tosu - ${url}`
-            )
-        );
-    });
+    if (isHTML) {
+        let content = fs.readFileSync(filePath, 'utf8');
+        content = addCounterMetadata(content, filePath);
+        res.writeHead(200, { 'Content-Type': contentType });
+        res.end(content);
+    } else {
+        res.writeHead(200, { 'Content-Type': contentType });
+        fs.createReadStream(filePath).pipe(res);
+    }
 }
 
 export function addCounterMetadata(html: string, filePath: string) {
     try {
         const staticPath = getStaticPath();
-
         const counterPath = path
             .dirname(filePath.replace(staticPath, ''))
             .replace(/^(\\\\\\|\\\\|\\|\/|\/\/)/, '')
             .replace(/\\/gm, '/');
 
-        html += `\n\n\n<script>\rwindow.COUNTER_PATH=\`${counterPath}\`\r</script>\n`;
-
-        return html;
+        return (
+            html +
+            `\n\n\n<script>\rwindow.COUNTER_PATH=\`${counterPath}\`\r</script>\n`
+        );
     } catch (error) {
         wLogger.error(
             'Failed to add counter metadata:',
             (error as any).message
         );
-        wLogger.debug('Counter metadata error details:', error);
-
-        return '';
+        return html;
     }
 }

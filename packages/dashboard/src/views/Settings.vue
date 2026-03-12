@@ -254,7 +254,7 @@ const getIcon = (name: string): string => `${solidSprite}#${name}`;
 
 						<SettingItem
 							v-model="settings.staticFolderPath"
-							name="Counters Directory"
+							name="Overlays Directory"
 							description="Local path where overlay assets are stored."
 							can-erase
 						>

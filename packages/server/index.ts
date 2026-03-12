@@ -1,7 +1,7 @@
 import { GlobalConfig, config, wLogger } from '@tosu/common';
 
-import buildCountersApi from './router/counters';
 import buildBaseApi from './router/index';
+import buildOverlaysApi from './router/overlays';
 import buildSCApi from './router/scApi';
 import buildSocket from './router/socket';
 import buildV1Api from './router/v1';
@@ -63,7 +63,7 @@ export class Server {
         // buildAssetsApi(this);
         buildV1Api(this.app);
         buildSCApi(this.app);
-        buildCountersApi(this.app);
+        buildOverlaysApi(this.app);
 
         buildV2Api(this.app);
 

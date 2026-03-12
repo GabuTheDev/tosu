@@ -1,5 +1,5 @@
 import { HttpServer } from '../index';
-import { directoryWalker } from '../utils/directories';
+import { serveStatic } from '../utils/directories';
 
 export default function buildV1Api(app: HttpServer) {
     app.route(/^\/Songs\/(?<filePath>.*)/, 'GET', (req, res) => {
@@ -16,7 +16,7 @@ export default function buildV1Api(app: HttpServer) {
             throw new Error('osu is not ready/running');
         }
 
-        directoryWalker({
+        serveStatic({
             res,
             baseUrl: url,
             pathname: req.params.filePath,

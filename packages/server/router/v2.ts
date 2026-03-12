@@ -3,7 +3,7 @@ import path from 'path';
 
 import { HttpServer, sendJson } from '../index';
 import { beatmapFileShortcut } from '../scripts/beatmapFile';
-import { directoryWalker } from '../utils/directories';
+import { serveStatic } from '../utils/directories';
 
 export default function buildV2Api(app: HttpServer) {
     app.route('/json/v2', 'GET', (req, res) => {
@@ -49,7 +49,7 @@ export default function buildV2Api(app: HttpServer) {
             throw new Error('osu is not ready/running');
         }
 
-        directoryWalker({
+        serveStatic({
             res,
             baseUrl: url,
             pathname: req.params.filePath,
@@ -84,7 +84,7 @@ export default function buildV2Api(app: HttpServer) {
         }
 
         const folder = path.join(global.gameFolder, 'Skins', global.skinFolder);
-        directoryWalker({
+        serveStatic({
             res,
             baseUrl: url,
             pathname: req.params.filePath,

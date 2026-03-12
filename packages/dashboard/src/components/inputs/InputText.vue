@@ -70,7 +70,7 @@ const onBlur = (event: FocusEvent) => {
 		ui.display = ui.lastValid;
 		error.value = undefined;
 	} else {
-		lastValidValue.value = ui.display;
+		ui.lastValid = ui.display;
 		model.value = ui.display;
 	}
 	emit('blur', event);

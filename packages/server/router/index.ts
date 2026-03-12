@@ -15,7 +15,7 @@ import path from 'path';
 
 import { Server, sendJson } from '../index';
 import { getContentType } from '../utils';
-import { directoryWalker } from '../utils/directories';
+import { serveStatic } from '../utils/directories';
 import { generateReport, generateReportHTML } from '../utils/report';
 
 export default function buildBaseApi(server: Server) {
@@ -152,22 +152,15 @@ export default function buildBaseApi(server: Server) {
     server.app.route(/.*/, 'GET', async (req, res) => {
         const url = req.pathname || '/';
         try {
-            if (url.startsWith(`/.well-know`)) {
+            if (url.includes('/.')) {
                 res.statusCode = 404;
-                res.statusMessage = 'Not Found';
                 return res.end();
             }
 
             const staticPath = getStaticPath();
             const dashboardPath = getDashboardPath();
 
-            // TODO: Redo this mess.
-
-            let relativePath = url;
-            if (relativePath === '/') relativePath = 'index.html';
-            if (relativePath.startsWith('/'))
-                relativePath = relativePath.substring(1);
-
+            const relativePath = url === '/' ? 'index.html' : url.substring(1);
             const dashboardFilePath = path.join(dashboardPath, relativePath);
 
             if (
@@ -180,30 +173,16 @@ export default function buildBaseApi(server: Server) {
             }
 
             if (url !== '/') {
-                const potentialCounterPath = path.join(
-                    staticPath,
-                    decodeURIComponent(url)
-                );
-                if (fs.existsSync(potentialCounterPath)) {
-                    const stats = fs.statSync(potentialCounterPath);
-                    const isDir = stats.isDirectory();
+                const decodedUrl = decodeURIComponent(url);
+                const counterPath = path.join(staticPath, decodedUrl);
 
-                    if (
-                        !isDir ||
-                        fs.existsSync(
-                            path.join(potentialCounterPath, 'index.html')
-                        )
-                    ) {
-                        return directoryWalker({
-                            _htmlRedirect: true,
-                            res,
-                            baseUrl: url,
-                            pathname: url.endsWith('/')
-                                ? url + 'index.html'
-                                : url,
-                            folderPath: staticPath
-                        });
-                    }
+                if (fs.existsSync(counterPath)) {
+                    return serveStatic({
+                        res,
+                        baseUrl: url,
+                        pathname: decodedUrl,
+                        folderPath: staticPath
+                    });
                 }
             }
 
@@ -219,9 +198,21 @@ export default function buildBaseApi(server: Server) {
                 res.writeHead(200, {
                     'Content-Type': 'text/html; charset=utf-8'
                 });
-                return res.end(
-                    '<h1>tosu</h1><p>Dashboard not found. Please run <code>pnpm run build</code> in <code>packages/dashboard</code>.</p>'
-                );
+
+                const isDev = process.env.NODE_ENV === 'development';
+
+                let message =
+                    '<h1>tosu</h1><p>Dashboard not found.</p>' +
+                    '<p>The current executable running does not contain the packaged dashboard. If this is not expected, please contact the developers on the official <a href="https://discord.gg/WX7BTs8kwh" target="_blank">Discord server</a>.</p>';
+
+                if (isDev) {
+                    message =
+                        '<h1>tosu</h1><p>Dashboard not found.</p>' +
+                        '<p>In development mode, you can either build the dashboard assets using <code>pnpm run build</code> in <code>packages/dashboard</code>, or run the Vite development server for a real-time solution.</p>' +
+                        '<p>To use Vite, run <code>pnpm run dev</code> in <code>packages/dashboard</code> and access it at <a href="http://localhost:5173" target="_blank">http://localhost:5173</a>.</p>';
+                }
+
+                return res.end(message);
             }
 
             res.statusCode = 404;
@@ -233,7 +224,7 @@ export default function buildBaseApi(server: Server) {
             );
             wLogger.debug(`Request error details for %${url}%:`, error);
 
-            res.writeHead(404);
+            res.statusCode = 404;
             return res.end((error as Error).message || '');
         }
     });

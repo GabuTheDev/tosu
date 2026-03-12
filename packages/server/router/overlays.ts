@@ -15,7 +15,7 @@ import path from 'path';
 import { HttpServer, sendJson } from '../index';
 import { ExtendedIncomingMessage, ServerResponse } from '../utils/http';
 
-export interface Counter {
+export interface Overlay {
     id?: string;
     name: string;
     author: string;
@@ -52,7 +52,7 @@ export function parseMetadata(content: string) {
     return metadata;
 }
 
-async function getLocalCounters(): Promise<Counter[]> {
+async function getLocalOverlays(): Promise<Overlay[]> {
     const staticPath = getStaticPath();
     const entries = walkDirectory(staticPath, {
         maxDepth: 1,
@@ -130,7 +130,7 @@ function fetchRepoData(): Promise<any> {
     });
 }
 
-async function getRepoCounters(): Promise<Counter[]> {
+async function getRepoOverlays(): Promise<Overlay[]> {
     try {
         const repoData = await fetchRepoData();
         return repoData.map((item: any) => ({
@@ -152,72 +152,72 @@ async function getRepoCounters(): Promise<Counter[]> {
         }));
     } catch (error) {
         wLogger.error(
-            'Failed to fetch repo counters:',
+            'Failed to fetch repo overlays:',
             (error as Error).message
         );
         return [];
     }
 }
 
-export default function buildCountersApi(app: HttpServer) {
-    const getCountersHandler = async (
+export default function buildOverlaysApi(app: HttpServer) {
+    const getOverlaysHandler = async (
         req: ExtendedIncomingMessage,
         res: ServerResponse
     ) => {
         try {
             const source = req.query.source || 'local';
 
-            let localCounters: Counter[] = [];
-            let repoCounters: Counter[] = [];
+            let localOverlays: Overlay[] = [];
+            let repoOverlays: Overlay[] = [];
 
             if (source === 'local' || source === 'all') {
-                localCounters = await getLocalCounters();
+                localOverlays = await getLocalOverlays();
             }
 
             if (source === 'repository' || source === 'all') {
-                repoCounters = await getRepoCounters();
+                repoOverlays = await getRepoOverlays();
             }
 
             if (source === 'all') {
-                const unifiedCounters: Counter[] = [...localCounters];
+                const unifiedOverlays: Overlay[] = [...localOverlays];
 
-                repoCounters.forEach((repoCounter) => {
-                    const local = localCounters.find(
+                repoOverlays.forEach((repoOverlay) => {
+                    const local = localOverlays.find(
                         (l) =>
                             l.name.toLowerCase() ===
-                                repoCounter.name.toLowerCase() &&
+                                repoOverlay.name.toLowerCase() &&
                             l.author.toLowerCase() ===
-                                repoCounter.author.toLowerCase()
+                                repoOverlay.author.toLowerCase()
                     );
                     if (local) {
                         local.isInstalled = true;
-                        local.id = repoCounter.id;
-                        local.downloadUrl = repoCounter.downloadUrl;
+                        local.id = repoOverlay.id;
+                        local.downloadUrl = repoOverlay.downloadUrl;
                     } else {
-                        unifiedCounters.push({
-                            ...repoCounter,
+                        unifiedOverlays.push({
+                            ...repoOverlay,
                             isInstalled: false
                         });
                     }
                 });
 
-                return sendJson(res, unifiedCounters);
+                return sendJson(res, unifiedOverlays);
             }
 
             return sendJson(
                 res,
-                source === 'local' ? localCounters : repoCounters
+                source === 'local' ? localOverlays : repoOverlays
             );
         } catch (error) {
             wLogger.error(
-                'Failed to fetch counters:',
+                'Failed to fetch overlays:',
                 (error as Error).message
             );
             return sendJson(res, { error: 'Internal server error' }, 500);
         }
     };
 
-    const downloadCounterHandler = async (
+    const downloadOverlayHandler = async (
         req: ExtendedIncomingMessage,
         res: ServerResponse
     ) => {
@@ -242,19 +242,19 @@ export default function buildCountersApi(app: HttpServer) {
             await unzip(tempPath, folderPath);
             fs.unlinkSync(tempPath);
 
-            wLogger.info(`Counter %${folderName}% downloaded and installed.`);
+            wLogger.info(`Overlay %${folderName}% downloaded and installed.`);
             return sendJson(res, { status: 'success', path: folderPath });
         } catch (error) {
             if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
             wLogger.error(
-                `Failed to download counter %${folderName}%:`,
+                `Failed to download overlay %${folderName}%:`,
                 (error as Error).message
             );
             return sendJson(res, { error: (error as Error).message }, 500);
         }
     };
 
-    const openCounterHandler = async (
+    const openOverlayHandler = async (
         req: ExtendedIncomingMessage,
         res: ServerResponse
     ) => {
@@ -280,7 +280,7 @@ export default function buildCountersApi(app: HttpServer) {
         });
     };
 
-    const deleteCounterHandler = async (
+    const deleteOverlayHandler = async (
         req: ExtendedIncomingMessage,
         res: ServerResponse
     ) => {
@@ -295,44 +295,77 @@ export default function buildCountersApi(app: HttpServer) {
 
         try {
             fs.rmSync(folderPath, { recursive: true, force: true });
-            wLogger.info(`Counter %${folderName}% deleted.`);
+            wLogger.info(`Overlay %${folderName}% deleted.`);
             return sendJson(res, { status: 'deleted' });
         } catch (error) {
             wLogger.error(
-                `Failed to delete counter %${folderName}%:`,
+                `Failed to delete overlay %${folderName}%:`,
                 (error as Error).message
             );
             return sendJson(res, { error: (error as Error).message }, 500);
         }
     };
 
-    app.route('/api/counters', 'GET', getCountersHandler);
+    app.route('/api/overlays', 'GET', getOverlaysHandler);
+    app.route('/api/counters', 'GET', getOverlaysHandler);
+
+    app.route(
+        /^\/api\/overlays\/(?<id>.*)\/download/,
+        'POST',
+        downloadOverlayHandler
+    );
     app.route(
         /^\/api\/counters\/(?<id>.*)\/download/,
         'POST',
-        downloadCounterHandler
+        downloadOverlayHandler
     );
-    app.route(/^\/api\/counters\/(?<id>.*)\/open/, 'POST', openCounterHandler);
-    app.route(/^\/api\/counters\/(?<id>.*)/, 'DELETE', deleteCounterHandler);
+
+    app.route(/^\/api\/overlays\/(?<id>.*)\/open/, 'POST', openOverlayHandler);
+    app.route(/^\/api\/counters\/(?<id>.*)\/open/, 'POST', openOverlayHandler);
+
+    app.route(/^\/api\/overlays\/(?<id>.*)/, 'DELETE', deleteOverlayHandler);
+    app.route(/^\/api\/counters\/(?<id>.*)/, 'DELETE', deleteOverlayHandler);
 
     // Fallbacks
+    app.route(
+        /^\/api\/overlays\/search\/(?<query>.*)/,
+        'GET',
+        async (req, res) => {
+            const overlays = await getLocalOverlays();
+            return sendJson(res, overlays);
+        }
+    );
     app.route(
         /^\/api\/counters\/search\/(?<query>.*)/,
         'GET',
         async (req, res) => {
-            const counters = await getLocalCounters();
-            return sendJson(res, counters);
+            const overlays = await getLocalOverlays();
+            return sendJson(res, overlays);
         }
+    );
+
+    app.route(
+        /^\/api\/overlays\/download\/(?<url>.*)/,
+        'GET',
+        downloadOverlayHandler
     );
     app.route(
         /^\/api\/counters\/download\/(?<url>.*)/,
         'GET',
-        downloadCounterHandler
+        downloadOverlayHandler
     );
-    app.route(/^\/api\/counters\/open\/(?<name>.*)/, 'GET', openCounterHandler);
+
+    app.route(/^\/api\/overlays\/open\/(?<name>.*)/, 'GET', openOverlayHandler);
+    app.route(/^\/api\/counters\/open\/(?<name>.*)/, 'GET', openOverlayHandler);
+
+    app.route(
+        /^\/api\/overlays\/delete\/(?<name>.*)/,
+        'GET',
+        deleteOverlayHandler
+    );
     app.route(
         /^\/api\/counters\/delete\/(?<name>.*)/,
         'GET',
-        deleteCounterHandler
+        deleteOverlayHandler
     );
 }

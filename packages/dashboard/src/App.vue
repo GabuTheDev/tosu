@@ -15,7 +15,8 @@ const layoutModules = import.meta.glob<Component>('./layouts/*.vue', {
 });
 
 const layouts = Object.entries(layoutModules).reduce<Record<string, Component>>((acc, [path, component]) => {
-	const name = path.split('/').pop()?.replace('.vue', '') + 'Layout';
+	const fileName = path.split('/').pop() || '';
+	const name = fileName.replace('.vue', '') + 'Layout';
 	acc[name] = component;
 	return acc;
 }, {});

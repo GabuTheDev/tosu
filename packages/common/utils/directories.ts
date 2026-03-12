@@ -120,26 +120,24 @@ export function getConfigPath() {
 
 export function getDashboardPath() {
     const programPath = getProgramPath();
+    const dataPath = getDataPath();
 
-    // TODO: Redo this mess too, bich
-    const locations = [
-        path.join(getDataPath(), 'dashboard'),
+    const candidates = [
+        path.join(dataPath, 'dashboard'),
+        path.join(programPath, 'dashboard'),
         path.join(programPath, 'packages', 'dashboard', 'dist'),
         path.join(programPath, '..', 'dashboard', 'dist'),
         path.join(programPath, '..', '..', 'dashboard', 'dist'),
         path.join(programPath, 'dist')
     ];
 
-    for (const loc of locations) {
-        if (fs.existsSync(path.join(loc, 'index.html'))) {
-            return path.resolve(loc);
-        }
-    }
-
-    // Default fallback
-    return path.resolve(
-        path.join(programPath, 'packages', 'dashboard', 'dist')
+    const found = candidates.find((loc) =>
+        fs.existsSync(path.join(loc, 'index.html'))
     );
+
+    return found
+        ? path.resolve(found)
+        : path.resolve(path.join(programPath, 'packages', 'dashboard', 'dist'));
 }
 
 export interface DirectoryEntry {
